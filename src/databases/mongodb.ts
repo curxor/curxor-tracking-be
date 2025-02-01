@@ -6,7 +6,7 @@ export default class MongoDBConnection {
     if (!MongoDBConnection.instance) {
       mongoose
         .connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_NAME })
-        .then(() => console.log("Connected!"));
+        .then(() => console.log("Connected to MongoDB!"));
     }
     return MongoDBConnection.instance;
   }

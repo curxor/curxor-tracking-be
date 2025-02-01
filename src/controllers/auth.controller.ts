@@ -1,5 +1,15 @@
 import { Request, Response } from "express";
+import AuthService from "../services/auth.service";
 export default class AuthController {
-  static signIn = (req: Request, res: Response) => {};
-  static verifySignIn = (req: Request, res: Response) => {};
+  static signIn = async (req: Request, res: Response) => {
+    await AuthService.signIn(req.body.email);
+    return res.json({ message: "ok", status: 200 });
+  };
+  static verifySignIn = async (req: Request, res: Response) => {
+    return res.json({
+      message: "ok",
+      status: 200,
+      data: await AuthService.verifySignIn({ ...req.body }),
+    });
+  };
 }
