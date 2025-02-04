@@ -1,25 +1,51 @@
 import { ObjectId } from "mongoose";
-import { User } from "../models/user.model";
-import { IUser } from "../models/user.model";
+import { User, IUser } from "../models/user.model";
 import createHttpError from "http-errors";
+import TransactionRepository from "../repositories/transaction.repo";
+import { getProfileDto } from "../dtos/user/get-profile.dto";
+
 export default class UserService {
-  static async findUserByEmail(email: string): Promise<IUser> {
-    const user = await User.findOne({ email });
-    if (!user) throw new createHttpError.BadRequest("User not found");
+  private static async findUserOrThrow(
+    query: object,
+    errorMessage: string
+  ): Promise<IUser> {
+    const user = await User.findOne(query);
+    if (!user) throw new createHttpError.BadRequest(errorMessage);
     return user;
   }
+
+  static async findUserByEmail(email: string): Promise<IUser> {
+    return this.findUserOrThrow({ email }, "User not found");
+  }
+
+  static async findUserById(_id: ObjectId): Promise<IUser> {
+    return this.findUserOrThrow({ _id }, "User not found");
+  }
+
+  static async createUser(email: string): Promise<IUser> {
+    return await User.create({ email });
+  }
+
   static async findUserByEmailOrCreate(email: string): Promise<void> {
     const user = await User.findOne({ email });
     if (!user) {
       await this.createUser(email);
     }
   }
-  static async findUserById(_id: ObjectId): Promise<IUser> {
-    const user = await User.findById(_id);
-    if (!user) throw new createHttpError.BadRequest("User not found");
-    return user;
-  }
-  static async createUser(email: string): Promise<IUser> {
-    return await User.create({ email });
+  static async getProfile(getProfile: getProfileDto): Promise<any> {
+    const { user, startDate, endDate } = getProfile;
+    const { _id } = user;
+    const expense = await TransactionRepository.calculateExpense(
+      _id,
+      startDate,
+      endDate
+    );
+    const income = await TransactionRepository.calculateIncome(
+      _id,
+      startDate,
+      endDate
+    );
+    const balance = income + expense;
+    return { user, expense, income, balance };
   }
 }

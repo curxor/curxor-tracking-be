@@ -8,7 +8,7 @@ import {
 import { IUser } from "../models/user.model";
 import { AIServiceFactory } from "./gemini.service";
 import { ITransaction, Transaction } from "../models/transaction.model";
-import ExpenseService from "./expense.service";
+import ExpenseService from "./category.service";
 import { getConversationBotDto } from "../dtos/conversation/get-conversation-bot.dto";
 import { convertToObjectId } from "../utils/objectId";
 import { ConversationData } from "../types/conversation.type";
@@ -51,7 +51,7 @@ export default class ConversationService {
   }
   static async sendMessage(sendMessageDto: sendMessageDto): Promise<any> {
     const { text, user, conversationId, botId } = sendMessageDto;
-    const expense = await ExpenseService.getExpense(user);
+    const expense = await ExpenseService.getCategories(user);
     const apiKey = process.env.GEMINI_API_KEY || "";
     const geminiService = AIServiceFactory.createService("gemini", apiKey);
     const PROMPT = `${process.env.CHAT_PROMPT}${text} - [expense: ${expense}]`;

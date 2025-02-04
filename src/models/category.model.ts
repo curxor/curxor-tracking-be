@@ -1,19 +1,20 @@
-import { model, Schema } from "mongoose";
-export interface IExpense {
-  _id: Schema.Types.ObjectId;
+import { model, Schema, Types } from "mongoose";
+import { CATEGORY_TYPE } from "../constant/category-type";
+export interface ICategory {
+  _id: Types.ObjectId;
   description: string;
   name: string;
   icon: string;
   type: string;
   amount: number;
-  user: Schema.Types.ObjectId;
+  user: Types.ObjectId;
 }
-const expenseSchema = new Schema<IExpense>(
+const categorySchema = new Schema<ICategory>(
   {
     name: { type: String, required: true },
     description: { type: String },
     icon: { type: String, required: true, default: "❓" },
-    type: { type: String, required: true },
+    type: { type: String, required: true, enum: { ...CATEGORY_TYPE } },
     amount: { type: Number, default: 0 },
     user: {
       type: Schema.Types.ObjectId,
@@ -25,4 +26,4 @@ const expenseSchema = new Schema<IExpense>(
   }
 );
 
-export const Expense = model<IExpense>("Expense", expenseSchema);
+export const Category = model<ICategory>("Category", categorySchema);

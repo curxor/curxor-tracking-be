@@ -14,7 +14,6 @@ export default class AuthController {
     });
   };
   static profile = async (req: AuthRequest, res: Response) => {
-    console.log(req.user);
     return res.json({
       message: "ok",
       status: 200,

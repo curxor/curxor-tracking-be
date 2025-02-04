@@ -1,9 +1,9 @@
-import { Schema } from "mongoose";
 import { IUser } from "../../models/user.model";
 
-export interface enterExpenseDto {
+export interface createCategoryDto {
   user: IUser;
   description: string;
+  name: string;
+  icon: string;
   amount: number;
-  expense: Schema.Types.ObjectId;
 }
