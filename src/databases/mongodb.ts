@@ -5,10 +5,11 @@ export default class MongoDBConnection {
   public static getInstance(): Connection {
     if (!MongoDBConnection.instance) {
       mongoose
-        .connect(process.env.MONGODB_URI, { dbName: process.env.MONGODB_NAME })
+        .connect(process.env.MONGODB_URI || "0", {
+          dbName: process.env.MONGODB_NAME,
+        })
         .then(() => console.log("Connected to MongoDB!"));
     }
     return MongoDBConnection.instance;
   }
 }
-

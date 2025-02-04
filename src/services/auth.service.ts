@@ -8,10 +8,7 @@ import createHttpError from "http-errors";
 const OTP_KEY = "otp-";
 export default class AuthService {
   static async signIn(email: string): Promise<void> {
-    let user = await UserService.findUserByEmail(email);
-    if (!user) {
-      user = await UserService.createUser(email);
-    }
+    await UserService.findUserByEmailOrCreate(email);
     const otp = generateOTP();
     EmailService.sendEmail({
       text: `Your OTP:${otp}`,
@@ -28,6 +25,7 @@ export default class AuthService {
     otp: string;
   }): Promise<String> {
     const userOtp = await RedisService.get(OTP_KEY + email);
+    if (!userOtp) throw createHttpError("Invalid OTP");
     if (!(await compare(otp, userOtp))) {
       throw createHttpError("Invalid OTP");
     }

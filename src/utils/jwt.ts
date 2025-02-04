@@ -5,11 +5,11 @@ export const signToken = (_id: string, email: string) => {
     _id,
     email,
   };
-  return sign(payload, process.env.ACCESS_KEY, { expiresIn: "15d" });
+  return sign(payload, process.env.ACCESS_KEY || "0", { expiresIn: "15d" });
 };
 export const verifyToken = (token: string) => {
   try {
-    return verify(token, process.env.ACCESS_KEY) as JwtPayload;
+    return verify(token, process.env.ACCESS_KEY || "0") as JwtPayload;
   } catch (error) {
     throw createHttpError.Unauthorized("Unauthorized");
   }

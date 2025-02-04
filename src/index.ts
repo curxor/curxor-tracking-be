@@ -5,9 +5,10 @@ import router from "./routes";
 import errorHandler from "./middlewares/handle.error.middleware";
 import MongoDBConnection from "./databases/mongodb";
 import RedisConnection from "./databases/redis";
+import cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api/v1", router);
