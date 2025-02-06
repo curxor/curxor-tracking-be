@@ -8,7 +8,11 @@ import RedisConnection from "./databases/redis";
 import cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://curxor-tracking.netlify.app", "http://localhost:8081"],
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api/v1", router);
