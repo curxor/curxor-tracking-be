@@ -12,7 +12,7 @@ export default class GeminiService implements AIServiceInterface {
   private genAI: GoogleGenerativeAI;
   private model: GenerativeModel;
 
-  constructor(apiKey: string, modelName: string = "gemini-1.5-pro") {
+  constructor(apiKey: string, modelName: string = "gemini-1.5-flash") {
     if (!apiKey) throw new Error("API Key is required.");
     this.genAI = new GoogleGenerativeAI(apiKey);
     this.model = this.genAI.getGenerativeModel({ model: modelName });
@@ -22,9 +22,7 @@ export default class GeminiService implements AIServiceInterface {
     if (!prompt.trim()) throw new Error("Prompt cannot be empty.");
 
     try {
-      const result = await this.model.generateContent(
-        prompt
-      );
+      const result = await this.model.generateContent(prompt);
       const response = result.response;
       return response.text();
     } catch (error) {
@@ -44,5 +42,3 @@ export class AIServiceFactory {
     }
   }
 }
-
-

@@ -2,14 +2,14 @@ import { model, Schema } from "mongoose";
 export interface ITransaction {
   description: string;
   amount: number;
-  expense: Schema.Types.ObjectId;
+  category: Schema.Types.ObjectId;
   user: Schema.Types.ObjectId;
 }
 const transactionSchema = new Schema<ITransaction>(
   {
     description: { type: String, required: true },
     amount: { type: Number, required: true, default: 0 },
-    expense: { type: Schema.Types.ObjectId, ref: "Expense" },
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

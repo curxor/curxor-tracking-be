@@ -5,8 +5,7 @@ import { authUser } from "../middlewares/auth.middleware";
 const routesCategory = express.Router();
 routesCategory.use(authUser);
 routesCategory
-  .post("/create-expense", catchError(CategoryController.createCategoryExpense))
-  .post("/create-income", catchError(CategoryController.createCategoryIncome))
+  .post("/create", catchError(CategoryController.createCategory))
   .post("/enter", catchError(CategoryController.enterCategory))
   .get("/expense", catchError(CategoryController.getCategoryExpense))
   .get("/income", catchError(CategoryController.getCategoryIncome))

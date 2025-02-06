@@ -5,5 +5,5 @@ export interface createCategoryDto {
   description: string;
   name: string;
   icon: string;
-  amount: number;
+  type: string;
 }

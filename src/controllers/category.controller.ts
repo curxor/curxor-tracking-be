@@ -3,26 +3,17 @@ import { AuthRequest } from "../interfaces/request";
 import CategoryService from "../services/category.service";
 
 export default class CategoryController {
-  static async createCategoryIncome(req: AuthRequest, res: Response) {
+  static async createCategory(req: AuthRequest, res: Response) {
     return res.json({
       message: "ok",
       status: 200,
-      data: await CategoryService.createCategoryIncome({
+      data: await CategoryService.createCategory({
         ...req.body,
         user: req.user,
       }),
     });
   }
-  static async createCategoryExpense(req: AuthRequest, res: Response) {
-    return res.json({
-      message: "ok",
-      status: 200,
-      data: await CategoryService.createCategoryExpense({
-        ...req.body,
-        user: req.user,
-      }),
-    });
-  }
+
   static async enterCategory(req: AuthRequest, res: Response) {
     return res.json({
       message: "ok",

@@ -6,26 +6,18 @@ import { IUser } from "../models/user.model";
 import { editCategoryDto } from "../dtos/category/edit-category.dto";
 import { convertToObjectId } from "../utils/objectId";
 import createHttpError from "http-errors";
-import { CATEGORY_TYPE } from "../constant/category-type";
+import { CATEGORY_TYPE } from "../constants/category-type";
 import { deleteCategoryDto } from "../dtos/category/delete-category.dto";
 
 export default class CategoryService {
-  static async createCategoryIncome(
+  static async createCategory(
     createCategoryDto: createCategoryDto
   ): Promise<ICategory> {
     return await Category.create({
       ...createCategoryDto,
-      type: CATEGORY_TYPE.INCOME,
     });
   }
-  static async createCategoryExpense(
-    createCategoryDto: createCategoryDto
-  ): Promise<ICategory> {
-    return await Category.create({
-      ...createCategoryDto,
-      type: CATEGORY_TYPE.EXPENSE,
-    });
-  }
+
   static async editCategory(editCategory: editCategoryDto): Promise<ICategory> {
     const { _id, user } = editCategory;
     const category = await Category.findById(convertToObjectId(_id));

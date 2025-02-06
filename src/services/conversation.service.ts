@@ -51,10 +51,12 @@ export default class ConversationService {
   }
   static async sendMessage(sendMessageDto: sendMessageDto): Promise<any> {
     const { text, user, conversationId, botId } = sendMessageDto;
-    const expense = await ExpenseService.getCategories(user);
+    const categories = await ExpenseService.getCategories(user);
     const apiKey = process.env.GEMINI_API_KEY || "";
     const geminiService = AIServiceFactory.createService("gemini", apiKey);
-    const PROMPT = `${process.env.CHAT_PROMPT}${text} - [expense: ${expense}]`;
+    const PROMPT = `${
+      process.env.CHAT_PROMPT
+    }${text} - [expense: ${JSON.stringify(categories, null, 2)}]`;
     const response = await geminiService.sendPrompt(PROMPT);
     const cleanedResponse = response.replace(/```json|```/g, "").trim();
     const parsedResponse = JSON.parse(cleanedResponse);
