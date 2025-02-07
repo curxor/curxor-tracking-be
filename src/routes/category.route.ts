@@ -7,8 +7,6 @@ routesCategory.use(authUser);
 routesCategory
   .post("/create", catchError(CategoryController.createCategory))
   .post("/enter", catchError(CategoryController.enterCategory))
-  .get("/expense", catchError(CategoryController.getCategoryExpense))
-  .get("/income", catchError(CategoryController.getCategoryIncome))
   .get("", catchError(CategoryController.getCategories))
   .put("/:id", catchError(CategoryController.editCategory))
   .delete("/:id", catchError(CategoryController.deleteCategory))

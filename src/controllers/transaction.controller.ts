@@ -12,10 +12,19 @@ export default class TransactionController {
     return res.json({ message: "ok", status: 200, data: rs });
   }
   static async editTransaction(req: AuthRequest, res: Response) {
-    const rs = await TransactionService.editTransaction({
-      ...req.body,
-      user: req.user,
-    });
+    const rs = await TransactionService.editTransaction(
+      {
+        ...req.body,
+      },
+      req.user
+    );
+    return res.json({ message: "ok", status: 200, data: rs });
+  }
+  static async deleteTransaction(req: AuthRequest, res: Response) {
+    const rs = await TransactionService.deleteTransaction(
+      req.user,
+      req.params.id as string
+    );
     return res.json({ message: "ok", status: 200, data: rs });
   }
 }

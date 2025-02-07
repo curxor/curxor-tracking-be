@@ -24,20 +24,6 @@ export default class CategoryController {
       }),
     });
   }
-  static async getCategoryExpense(req: AuthRequest, res: Response) {
-    return res.json({
-      message: "ok",
-      status: 200,
-      data: await CategoryService.getCategoryExpense(req.user),
-    });
-  }
-  static async getCategoryIncome(req: AuthRequest, res: Response) {
-    return res.json({
-      message: "ok",
-      status: 200,
-      data: await CategoryService.getCategoryIncome(req.user),
-    });
-  }
   static async getCategories(req: AuthRequest, res: Response) {
     return res.json({
       message: "ok",

@@ -1,10 +1,13 @@
-import { model, Schema } from "mongoose";
-export interface ITransaction {
+import {  model, Schema } from "mongoose";
+export interface ITransaction extends Document {
+  updateOne: (update: Partial<ITransaction>) => Promise<void>;
+  deleteOne: () => Promise<void>;
   description: string;
   amount: number;
   category: Schema.Types.ObjectId;
   user: Schema.Types.ObjectId;
 }
+
 const transactionSchema = new Schema<ITransaction>(
   {
     description: { type: String, required: true },

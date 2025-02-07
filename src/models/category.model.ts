@@ -1,15 +1,17 @@
 import { model, Schema, Types } from "mongoose";
 import { CATEGORY_TYPE } from "../constants/category-type";
-  export interface ICategory {
-    _id: Types.ObjectId;
-    description: string;
-    name: string;
-    icon: string;
-    type: string;
-    amount: number;
-    user: Types.ObjectId;
-  }
-const categorySchema = new Schema<ICategory>(
+export interface CategoryDocument extends Document {
+  _id: Types.ObjectId;
+  description: string;
+  name: string;
+  icon: string;
+  type: string;
+  amount: number;
+  user: Types.ObjectId;
+  updateOne: (update: Partial<CategoryDocument>) => Promise<void>;
+  deleteOne: () => Promise<void>;
+}
+const categorySchema = new Schema<CategoryDocument>(
   {
     name: { type: String, required: true },
     description: { type: String },
@@ -26,4 +28,4 @@ const categorySchema = new Schema<ICategory>(
   }
 );
 
-export const Category = model<ICategory>("Category", categorySchema);
+export const Category = model<CategoryDocument>("Category", categorySchema);
