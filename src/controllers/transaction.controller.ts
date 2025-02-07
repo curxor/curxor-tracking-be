@@ -27,4 +27,17 @@ export default class TransactionController {
     );
     return res.json({ message: "ok", status: 200, data: rs });
   }
+  static async getTransactions(req: AuthRequest, res: Response) {
+    const { limit = "10", page = "1", search } = req.query;
+    return res.json({
+      message: "ok",
+      status: 200,
+      data: await TransactionService.getTransactions({
+        user: req.user,
+        limit: parseInt(limit as string, 10),
+        page: parseInt(page as string, 10),
+        search: search as string,
+      }),
+    });
+  }
 }

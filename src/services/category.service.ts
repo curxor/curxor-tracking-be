@@ -1,13 +1,10 @@
 import { createCategoryDto } from "../dtos/category/create-category.dto";
 import { Category, CategoryDocument } from "../models/category.model";
 import { ICategory } from "../interfaces/category";
-import { Transaction, ITransaction } from "../models/transaction.model";
-import { enterCategoryDto } from "../dtos/category/enter-category.dto";
 import { IUser } from "../models/user.model";
 import { editCategoryDto } from "../dtos/category/edit-category.dto";
 import { convertToObjectId } from "../utils/objectId";
 import createHttpError from "http-errors";
-import { CATEGORY_TYPE } from "../constants/category-type";
 import { deleteCategoryDto } from "../dtos/category/delete-category.dto";
 
 export default class CategoryService {
@@ -43,18 +40,6 @@ export default class CategoryService {
     const { _id, user } = deleteCategory;
     const category = await this.findCategory(_id, user);
     await category.deleteOne();
-  }
-
-  static async enterCategory(
-    enterCategory: enterCategoryDto
-  ): Promise<ITransaction> {
-    return await Transaction.create(enterCategory);
-  }
-
-  static async getTransactions(user: IUser): Promise<ITransaction[]> {
-    return await Transaction.find({ user: user._id })
-      .populate("category")
-      .sort({ createdAt: -1 });
   }
   static async getCategories(user: IUser): Promise<ICategory[]> {
     return await Category.find({

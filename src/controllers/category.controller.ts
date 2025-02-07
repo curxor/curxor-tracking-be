@@ -13,17 +13,6 @@ export default class CategoryController {
       }),
     });
   }
-
-  static async enterCategory(req: AuthRequest, res: Response) {
-    return res.json({
-      message: "ok",
-      status: 200,
-      data: await CategoryService.enterCategory({
-        ...req.body,
-        user: req.user,
-      }),
-    });
-  }
   static async getCategories(req: AuthRequest, res: Response) {
     return res.json({
       message: "ok",
@@ -50,13 +39,6 @@ export default class CategoryController {
         user: req.user,
         ...req.body,
       }),
-    });
-  }
-  static async getTransactions(req: AuthRequest, res: Response) {
-    return res.json({
-      message: "ok",
-      status: 200,
-      data: await CategoryService.getTransactions(req.user),
     });
   }
 }

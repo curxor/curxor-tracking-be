@@ -2,12 +2,12 @@ import { sendMessageDto } from "../dtos/conversation/send-message.dto";
 import {
   Conversation,
   IConversation,
-  IMessage,
   Message,
 } from "../models/conversation.model";
 import { IUser } from "../models/user.model";
 import { AIServiceFactory } from "./gemini.service";
-import { ITransaction, Transaction } from "../models/transaction.model";
+import { Transaction } from "../models/transaction.model";
+import { ITransaction } from "../interfaces/transaction";
 import ExpenseService from "./category.service";
 import { getConversationBotDto } from "../dtos/conversation/get-conversation-bot.dto";
 import { convertToObjectId } from "../utils/objectId";
@@ -58,16 +58,16 @@ export default class ConversationService {
       process.env.CHAT_PROMPT
     }${text} - [expense: ${JSON.stringify(categories, null, 2)}]`;
     const response = await geminiService.sendPrompt(PROMPT);
-    const cleanedResponse = response.replace(/```json|```/g, "").trim();
-    const parsedResponse = JSON.parse(cleanedResponse);
+    const parsedResponse = JSON.parse(
+      response.replace(/```json|```/g, "").trim()
+    );
+
     const transactions = parsedResponse.main?.length
       ? await Transaction.insertMany(
-          parsedResponse.main.map((item: ITransaction) => ({
-            ...item,
-            user,
-          }))
+          parsedResponse.main.map((item: ITransaction) => ({ ...item, user }))
         )
       : [];
+
     const messages = [
       { text, conversation: convertToObjectId(conversationId), user },
       {
@@ -77,6 +77,7 @@ export default class ConversationService {
         user: botId,
       },
     ];
+
     await Message.insertMany(messages);
     return { ...parsedResponse, transactions };
   }

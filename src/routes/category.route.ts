@@ -6,9 +6,7 @@ const routesCategory = express.Router();
 routesCategory.use(authUser);
 routesCategory
   .post("/create", catchError(CategoryController.createCategory))
-  .post("/enter", catchError(CategoryController.enterCategory))
   .get("", catchError(CategoryController.getCategories))
   .put("/:id", catchError(CategoryController.editCategory))
   .delete("/:id", catchError(CategoryController.deleteCategory))
-  .get("/transactions", catchError(CategoryController.getTransactions));
 export default routesCategory;

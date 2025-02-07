@@ -1,5 +1,10 @@
 import { Types } from "mongoose";
 import { Transaction } from "../models/transaction.model";
+import { ITransaction } from "../interfaces/transaction";
+import {
+  getTransactionDto,
+  getTransactionRepoDto,
+} from "../dtos/transaction/get-transaction.dto";
 
 export default class TransactionRepository {
   static async calculateExpense(
@@ -51,5 +56,21 @@ export default class TransactionRepository {
       },
     ]);
     return result[0]?.totalAmount || 0;
+  }
+  static async getTransactions(
+    transaction: getTransactionRepoDto
+  ): Promise<ITransaction[]> {
+    const { limit, page, query } = transaction;
+    return await Transaction.find(query)
+      .select("description amount category createdAt")
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .populate("category")
+      .sort({ createdAt: -1 })
+      .lean<ITransaction[]>()
+      .exec();
+  }
+  static async getTransactionCount(query: any): Promise<number> {
+    return await Transaction.countDocuments(query);
   }
 }

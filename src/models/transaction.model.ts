@@ -1,6 +1,6 @@
-import {  model, Schema } from "mongoose";
-export interface ITransaction extends Document {
-  updateOne: (update: Partial<ITransaction>) => Promise<void>;
+import { model, Schema } from "mongoose";
+export interface TransactionDocument extends Document {
+  updateOne: (update: Partial<TransactionDocument>) => Promise<void>;
   deleteOne: () => Promise<void>;
   description: string;
   amount: number;
@@ -8,7 +8,7 @@ export interface ITransaction extends Document {
   user: Schema.Types.ObjectId;
 }
 
-const transactionSchema = new Schema<ITransaction>(
+const transactionSchema = new Schema<TransactionDocument>(
   {
     description: { type: String, required: true },
     amount: { type: Number, required: true, default: 0 },
@@ -16,6 +16,7 @@ const transactionSchema = new Schema<ITransaction>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      index: true,
     },
   },
   {
@@ -23,7 +24,7 @@ const transactionSchema = new Schema<ITransaction>(
   }
 );
 
-export const Transaction = model<ITransaction>(
+export const Transaction = model<TransactionDocument>(
   "Transaction",
   transactionSchema
 );

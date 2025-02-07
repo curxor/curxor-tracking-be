@@ -1,14 +1,17 @@
 import createHttpError from "http-errors";
-import { ITransaction, Transaction } from "../models/transaction.model";
+import { Transaction, TransactionDocument } from "../models/transaction.model";
+import { ITransaction } from "../interfaces/transaction";
 import { IUser } from "../models/user.model";
 import { convertToObjectId } from "../utils/objectId";
 import { editTransactionDto } from "../dtos/transaction/edit-transaction.dto";
+import { getTransactionDto } from "../dtos/transaction/get-transaction.dto";
+import TransactionRepository from "../repositories/transaction.repo";
 
 export default class TransactionService {
   private static async findTransaction(
     user: IUser,
     _id: string
-  ): Promise<ITransaction> {
+  ): Promise<TransactionDocument> {
     const transaction = await Transaction.findOne({
       user: user._id,
       _id: convertToObjectId(_id),
@@ -22,7 +25,7 @@ export default class TransactionService {
   static async getTransactionDetails(
     user: IUser,
     _id: string
-  ): Promise<ITransaction> {
+  ): Promise<TransactionDocument> {
     return this.findTransaction(user, _id);
   }
 
@@ -37,5 +40,25 @@ export default class TransactionService {
   static async deleteTransaction(user: IUser, _id: string): Promise<void> {
     const transaction = await this.findTransaction(user, _id);
     await transaction.deleteOne();
+  }
+  static async getTransactions(
+    getTransactions: getTransactionDto
+  ): Promise<any> {
+    const { user, limit, search } = getTransactions;
+    const query: any = { user };
+    // if (search) {
+    //   query.$or = [
+    //     { description: { $regex: search, $options: "i" } },
+    //     // { "category.name": { $regex: search, $options: "i" } },
+    //   ];
+    // }
+    const [transactions, count] = await Promise.all([
+      TransactionRepository.getTransactions({
+        ...getTransactions,
+        query,
+      }),
+      TransactionRepository.getTransactionCount(query),
+    ]);
+    return { transactions, pageCount: Math.ceil(count / limit), total: count };
   }
 }
