@@ -12,6 +12,7 @@ import ExpenseService from "./category.service";
 import { getConversationBotDto } from "../dtos/conversation/get-conversation-bot.dto";
 import { convertToObjectId } from "../utils/objectId";
 import { ConversationData } from "../types/conversation.type";
+import { ocr } from "../utils/ocr";
 
 export default class ConversationService {
   static async startConversation(user: IUser): Promise<void> {
@@ -50,26 +51,36 @@ export default class ConversationService {
     return { messages, conversation: conversation._id };
   }
   static async sendMessage(sendMessageDto: sendMessageDto): Promise<any> {
-    const { text, user, conversationId, botId } = sendMessageDto;
-    const categories = await ExpenseService.getCategories(user);
-    const apiKey = process.env.GEMINI_API_KEY || "";
+    const { text, user, conversationId, botId, file } = sendMessageDto;
+    const [categories, apiKey] = await Promise.all([
+      ExpenseService.getCategories(user),
+      process.env.GEMINI_API_KEY || "",
+    ]);
+    let imageText = "";
+    if (!text && file) {
+      imageText = await ocr(file);
+    }
     const geminiService = AIServiceFactory.createService("gemini", apiKey);
-    const PROMPT = `${
-      process.env.CHAT_PROMPT
-    }${text} - [expense: ${JSON.stringify(categories, null, 2)}]`;
+    const PROMPT = `${process.env.CHAT_PROMPT} [Main Input :  ${
+      text || imageText
+    }] - [expense: ${JSON.stringify(categories, null, 2)}]`;
+    console.log(PROMPT);
     const response = await geminiService.sendPrompt(PROMPT);
-    const parsedResponse = JSON.parse(
-      response.replace(/```json|```/g, "").trim()
-    );
+    let parsedResponse;
+    parsedResponse = JSON.parse(response.replace(/```json|```/g, "").trim());
 
     const transactions = parsedResponse.main?.length
       ? await Transaction.insertMany(
           parsedResponse.main.map((item: ITransaction) => ({ ...item, user }))
         )
       : [];
-
+    console.log(parsedResponse);
     const messages = [
-      { text, conversation: convertToObjectId(conversationId), user },
+      {
+        text: text || imageText,
+        conversation: convertToObjectId(conversationId),
+        user,
+      },
       {
         text: parsedResponse.text,
         conversation: convertToObjectId(conversationId),
