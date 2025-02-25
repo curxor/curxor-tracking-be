@@ -14,11 +14,13 @@ jest.mock("../src/services/email.service");
 jest.mock("../src/databases/redis");
 jest.mock("../src/utils/bcrypt");
 jest.mock("../src/utils/jwt");
-describe(" AuthService - Đăng nhậ bằng OTP", () => {
+describe("Đăng nhập email bằng OTP", () => {
   beforeEach(() => {
     jest.clearAllMocks(); // Reset mock trước mỗi test
   });
-  it("✅ Gửi OTP thành công khi nhập email hợp lệ", async () => {
+
+  //#endregion: Gửi OTP thành công khi nhập email hợp lệ
+  it("Gửi OTP thành công khi nhập email hợp lệ", async () => {
     // Giả lập tìm thấy user hoặc tạo mới
     (UserService.findUserByEmailOrCreate as jest.Mock).mockResolvedValue(
       undefined
@@ -45,8 +47,10 @@ describe(" AuthService - Đăng nhậ bằng OTP", () => {
       "hashed-otp"
     );
   });
+  //#endregion
 
-  it("✅ Xác thực OTP thành công", async () => {
+  //#region: Xác thực OTP thành công
+  it("Xác thực OTP thành công", async () => {
     (RedisService.get as jest.Mock).mockResolvedValue("hashed-otp");
     (compare as jest.Mock).mockResolvedValue(true); // OTP đúng
     (UserService.findUserByEmail as jest.Mock).mockResolvedValue({
@@ -68,8 +72,9 @@ describe(" AuthService - Đăng nhậ bằng OTP", () => {
     expect(signToken).toHaveBeenCalledWith("123", "test@example.com");
     expect(token).toBe("mocked-token");
   });
-
-  it("❌ Xác thực OTP thất bại khi OTP sai", async () => {
+  //#endregion
+  //#region Xác thực OTP thất bại khi OTP sai
+  it(" Xác thực OTP thất bại khi OTP sai", async () => {
     (RedisService.get as jest.Mock).mockResolvedValue("hashed-otp");
     (compare as jest.Mock).mockResolvedValue(false); // OTP sai
 
@@ -80,8 +85,9 @@ describe(" AuthService - Đăng nhậ bằng OTP", () => {
     expect(RedisService.get).toHaveBeenCalledWith("otp-test@example.com");
     expect(compare).toHaveBeenCalledWith("000000", "hashed-otp");
   });
-
-  it("❌ Xác thực OTP thất bại khi OTP hết hạn", async () => {
+  //#endregion
+  //#region Xác thực OTP thất bại khi OTP hết hạn
+  it(" Xác thực OTP thất bại khi OTP hết hạn", async () => {
     (RedisService.get as jest.Mock).mockResolvedValue(null); // OTP không tồn tại
 
     await expect(
@@ -90,4 +96,5 @@ describe(" AuthService - Đăng nhậ bằng OTP", () => {
 
     expect(RedisService.get).toHaveBeenCalledWith("otp-test@example.com");
   });
+  //#endregion
 });
