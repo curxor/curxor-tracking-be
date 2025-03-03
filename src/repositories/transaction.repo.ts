@@ -57,6 +57,22 @@ export default class TransactionRepository {
     ]);
     return result[0]?.totalAmount || 0;
   }
+  static async calculateBalanceAllTime(userId: Types.ObjectId) {
+    const result = await Transaction.aggregate([
+      {
+        $match: {
+          user: userId,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+    ]);
+    return result[0]?.totalAmount || 0;
+  }
   static async getTransactions(
     transaction: getTransactionRepoDto
   ): Promise<ITransaction[]> {

@@ -35,17 +35,13 @@ export default class UserService {
   static async getProfile(getProfile: getProfileDto): Promise<any> {
     const { user, startDate, endDate } = getProfile;
     const { _id } = user;
-    const expense = await TransactionRepository.calculateExpense(
-      _id,
-      startDate,
-      endDate
-    );
-    const income = await TransactionRepository.calculateIncome(
-      _id,
-      startDate,
-      endDate
-    );
+
+    const [expense, income, balanceAllTime] = await Promise.all([
+      TransactionRepository.calculateExpense(_id, startDate, endDate),
+      TransactionRepository.calculateIncome(_id, startDate, endDate),
+      TransactionRepository.calculateBalanceAllTime(_id),
+    ]);
     const balance = income + expense;
-    return { user, expense, income, balance };
+    return { user, expense, income, balance, balanceAllTime };
   }
 }
