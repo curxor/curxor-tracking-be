@@ -35,3 +35,22 @@ export default class AuthService {
     return signToken(user._id.toString(), email);
   }
 }
+// static async verifySignIn({
+//   email,
+//   otp,
+// }: {
+//   email: string;
+//   otp: string;
+// }): Promise<string> {
+//   const userOtp = await RedisService.get(OTP_KEY + email);
+//   if (!userOtp) throw createHttpError("Invalid OTP");
+//   if (!(await compare(otp, userOtp))) {
+//     throw createHttpError("Invalid OTP");
+//   }
+//   await RedisService.remove(OTP_KEY + email);
+
+//   const user = await UserService.findUserByEmail(email);
+//   if (!user) throw createHttpError("User not found"); // Thêm kiểm tra này
+
+//   return signToken(user._id.toString(), email);
+// }
