@@ -1,11 +1,13 @@
 import AuthService from "../src/services/auth.service";
 import UserService from "../src/services/user.service";
-import EmailService from "../src/services/email.service";
-import RedisService from "../src/databases/redis";
+import EmailService from "../src/services/email.service"; // gửi mã otp
+import RedisService from "../src/databases/redis"; // lưu và lấy otp
 import { hash, compare } from "../src/utils/bcrypt";
 import { signToken } from "../src/utils/jwt";
 import bodyParser from "body-parser";
 import express from "express";
+import { isNullOrUndefined } from "node:util";
+//bcrypt → Sử dụng để băm và so sánh mã OTP
 const app = express();
 app.use(bodyParser.json());
 // Định nghĩa route nhu trong server thật
@@ -21,15 +23,15 @@ describe("Đăng nhập email bằng OTP", () => {
 
   //#region 01: Gửi OTP thành công khi nhập email hợp lệ
   it("Gửi OTP thành công khi nhập email hợp lệ", async () => {
-    // Giả lập tìm thấy user hoặc tạo mới
+    // Kiểm tra xem user đã tồn tại hay chưa, nếu chưa thì tạo mới.
     (UserService.findUserByEmailOrCreate as jest.Mock).mockResolvedValue(
-      undefined
+      isNullOrUndefined
     );
     // Mock hàm gửi email
     (EmailService.sendEmail as jest.Mock).mockResolvedValue(undefined);
     // Mock Redis lưu OTP
     (RedisService.set as jest.Mock).mockResolvedValue(undefined);
-    // Mock bcrypt hash
+    // Mock bcrypt hash: Băm OTP trước khi lưu vào Redis để tăng tính bảo mật
     (hash as jest.Mock).mockResolvedValue("hashed-otp");
 
     await AuthService.signIn("ngoc@gmail.com");
