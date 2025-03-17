@@ -192,9 +192,7 @@ describe("CategoryService", () => {
     //   lean: jest.fn().mockReturnThis(),
     //   exec: jest.fn().mockResolvedValue([]),
     // });
-
     const result = await CategoryService.getCategories(mockUser);
-
     expect(Category.find).toHaveBeenCalledWith({ user: mockUser._id });
     expect(result).toEqual([categoryWithId]);
   });
@@ -226,7 +224,6 @@ describe("CategoryService", () => {
   //#region UTCID04
   test("Báo lỗi khi không tim thấy loại sửa", async () => {
     (Category.findById as jest.Mock).mockResolvedValue(null);
-
     const updatedCategory: editCategoryDto = {
       // _id: new Types.ObjectId(), // Tạo ObjectId mới cho trường hợp không tìm thấy
       _id: new Types.ObjectId().toHexString(),
@@ -236,7 +233,6 @@ describe("CategoryService", () => {
       icon: "🍕",
       type: "expense",
     };
-
     await expect(CategoryService.editCategory(updatedCategory)).rejects.toThrow(
       "Category not found"
     );
