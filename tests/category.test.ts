@@ -168,7 +168,7 @@ describe("CategoryService", () => {
     jest.clearAllMocks();
     mockCategoryId = new Types.ObjectId();
   });
-  //#region UTCID01
+  //#region #01_Tạo danh mục loại
   test("Tạo danh mục loại", async () => {
     const createdCategory = { _id: mockCategoryId, ...mockCategory };
     (Category.create as jest.Mock).mockResolvedValue(createdCategory);
@@ -180,7 +180,7 @@ describe("CategoryService", () => {
     expect(result).toEqual(createdCategory);
   });
   //#endregion
-  //#region UTCID02
+  //#region #02_Lấy danh mục
   test("Lấy danh mục loại", async () => {
     const categoryWithId = { _id: mockCategoryId, ...mockCategory };
     (Category.find as jest.Mock).mockReturnValue({
@@ -197,7 +197,7 @@ describe("CategoryService", () => {
     expect(result).toEqual([categoryWithId]);
   });
   //#endregion
-  //#region UTCID03
+  //#region #03_Cập nhật loại
   // test("Cập nhật loại", async () => {
   //   const existingCategory = { _id: mockCategoryId, ...mockCategory };
   //   (Category.findById as jest.Mock).mockResolvedValue({
@@ -221,7 +221,7 @@ describe("CategoryService", () => {
   //   expect(result.name).toBe("Shopping");
   // });
   //#endregion
-  //#region UTCID04
+  //#region #04_Báo lỗi khi không tìm thấy loại cập nhật
   test("Báo lỗi khi không tim thấy loại sửa", async () => {
     (Category.findById as jest.Mock).mockResolvedValue(null);
     const updatedCategory: editCategoryDto = {
@@ -238,7 +238,7 @@ describe("CategoryService", () => {
     );
   });
   //#endregion
-  //#region UTCID05
+  //#region #05_Xóa loại
   // test("Xóa loại", async () => {
   //   const existingCategory = { _id: mockCategoryId, ...mockCategory };
   //   (Category.findById as jest.Mock).mockResolvedValue({
@@ -259,7 +259,7 @@ describe("CategoryService", () => {
   //   // expect(Category.findById).toHaveBeenCalledWith(mockCategoryId);
   // });
   //#endregion
-  //#region UTCID06
+  //#region #06_Xóa không tìm thấy loại
   test("Xóa không tìm thấy loại", async () => {
     (Category.findById as jest.Mock).mockResolvedValue(null);
 

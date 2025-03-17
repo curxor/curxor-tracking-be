@@ -8,6 +8,15 @@ import createHttpError from "http-errors";
 const OTP_KEY = "otp-";
 export default class AuthService {
   static async signIn(email: string): Promise<void> {
+    //#region Điều kiện kiểm tra unit test
+    if (!email) throw createHttpError(400, "Email is required");
+
+    // Kiểm tra định dạng email bằng regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw createHttpError(400, "Invalid email address");
+    }
+    //#endregion
     await UserService.findUserByEmailOrCreate(email);
     const otp = generateOTP();
     EmailService.sendEmail({
@@ -24,13 +33,21 @@ export default class AuthService {
     email: string;
     otp: string;
   }): Promise<String> {
+    // Kiểm tra email hợp lệ
+    if (!email) throw createHttpError(400, "Email is required");
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      throw createHttpError(400, "Invalid email address");
+    }
+    // Kiểm tra OTP trong Redis
     const userOtp = await RedisService.get(OTP_KEY + email);
     if (!userOtp) throw createHttpError("Invalid OTP");
     if (!(await compare(otp, userOtp))) {
       throw createHttpError("Invalid OTP");
     }
     await RedisService.remove(OTP_KEY + email);
-
+    // Kiểm tra User đã tồn tại
     const user = await UserService.findUserByEmail(email);
     return signToken(user._id.toString(), email);
   }

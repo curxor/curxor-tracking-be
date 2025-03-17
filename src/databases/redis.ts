@@ -6,6 +6,31 @@ export default class RedisService {
 
   private constructor() {}
 
+  //#region connect()
+  public static async connect(): Promise<void> {
+    if (!RedisService.instance) {
+      RedisService.instance = new Redis(configRedis);
+
+      // Đăng ký sự kiện một lần duy nhất
+      RedisService.instance.once("connect", () => {
+        console.log(" Connected to Redis!");
+      });
+
+      RedisService.instance.once("error", (err) => {
+        console.error(" Redis connection error:", err);
+      });
+    }
+  }
+  //#endregion
+  //#region disconnect()
+  public static async disconnect(): Promise<void> {
+    if (RedisService.instance) {
+      await RedisService.instance.quit(); // Dùng quit để đóng kết nối an toàn
+      RedisService.instance = undefined as any; // Reset lại instance để có thể tạo lại khi cần
+      console.log("🔌 Disconnected from Redis");
+    }
+  }
+  //#endregion
   public static getInstance(): Redis {
     if (!RedisService.instance) {
       RedisService.instance = new Redis(configRedis);
