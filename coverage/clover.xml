@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742231443853" clover="3.2.0">
-  <project timestamp="1742231443853" name="All files">
-    <metrics statements="162" coveredstatements="73" conditionals="35" coveredconditionals="5" methods="45" coveredmethods="11" elements="242" coveredelements="89" complexity="0" loc="162" ncloc="162" packages="8" files="17" classes="17"/>
+<coverage generated="1742232730768" clover="3.2.0">
+  <project timestamp="1742232730768" name="All files">
+    <metrics statements="167" coveredstatements="78" conditionals="35" coveredconditionals="5" methods="45" coveredmethods="11" elements="247" coveredelements="94" complexity="0" loc="167" ncloc="167" packages="9" files="18" classes="18"/>
     <package name="src">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="math.ts" path="D:\NamIII\KyII\BDCLPM\project\curxor-tracking-be\src\math.ts">
@@ -51,6 +51,17 @@
         <line num="49" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.mocks">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="category.mock.ts" path="D:\NamIII\KyII\BDCLPM\project\curxor-tracking-be\src\mocks\category.mock.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.models">
@@ -130,7 +141,7 @@
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="14" count="17" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="24" count="2" type="cond" truecount="2" falsecount="1"/>
         <line num="25" count="2" type="stmt"/>
