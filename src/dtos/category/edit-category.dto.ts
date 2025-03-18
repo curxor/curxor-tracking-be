@@ -7,6 +7,6 @@ export interface editCategoryDto {
   description: string;
   name: string;
   icon: string;
-  amount: number;
+  amount?: number;
   type: string;
 }

@@ -8,6 +8,7 @@ import { getTransactionDto } from "../dtos/transaction/get-transaction.dto";
 import TransactionRepository from "../repositories/transaction.repo";
 
 export default class TransactionService {
+  //#region findTransaction
   private static async findTransaction(
     user: IUser,
     _id: string
@@ -21,14 +22,16 @@ export default class TransactionService {
     }
     return transaction;
   }
-
+  //#endregion
+  //#region getTransactionDetails
   static async getTransactionDetails(
     user: IUser,
     _id: string
   ): Promise<TransactionDocument> {
     return this.findTransaction(user, _id);
   }
-
+  //#endregion
+  //#region editTransaction
   static async editTransaction(
     editTransaction: editTransactionDto,
     user: IUser
@@ -37,10 +40,14 @@ export default class TransactionService {
     const transaction = await this.findTransaction(user, _id);
     await transaction.updateOne(editTransaction);
   }
+  //#endregion
+  //#region deleteTransaction
   static async deleteTransaction(user: IUser, _id: string): Promise<void> {
     const transaction = await this.findTransaction(user, _id);
     await transaction.deleteOne();
   }
+  //#endregion
+  //#region getTransactions
   static async getTransactions(
     getTransactions: getTransactionDto
   ): Promise<any> {
@@ -61,4 +68,5 @@ export default class TransactionService {
     ]);
     return { transactions, pageCount: Math.ceil(count / limit), total: count };
   }
+  //#endregion
 }
