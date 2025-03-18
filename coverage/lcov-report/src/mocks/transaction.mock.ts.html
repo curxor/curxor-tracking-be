@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/models/category.model.ts</title>
+    <title>Code coverage report for src/mocks/transaction.mock.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/models</a> category.model.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/mocks</a> transaction.mock.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>5/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,7 +94,16 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -106,8 +115,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,44 +127,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { model, Schema, Types } from "mongoose";
-import { CATEGORY_TYPE } from "../constants/category-type";
-export interface CategoryDocument extends Document {
-  _id: Types.ObjectId;
-  description: string;
-  name: string;
-  icon: string;
-  type: string;
-  amount: number;
-  user: Types.ObjectId;
-  updateOne: (update: Partial&lt;CategoryDocument&gt;) =&gt; Promise&lt;void&gt;;
-  deleteOne: () =&gt; Promise&lt;void&gt;;
-}
-const categorySchema = new Schema&lt;CategoryDocument&gt;(
-  {
-    name: { type: String, required: true },
-    description: { type: String },
-    icon: { type: String, required: true, default: "❓" },
-    type: { type: String, required: true, enum: { ...CATEGORY_TYPE } },
-    amount: { type: Number, default: 0 },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/__tests__/transaction.mock.ts
+import { Types } from "mongoose";
 &nbsp;
-export const Category = model&lt;CategoryDocument&gt;("Category", categorySchema);
+export const mockUser = {
+  _id: new Types.ObjectId("60d0fe4f5311236168a109ca"),
+  email: "test@example.com",
+  name: "Test User",
+};
+&nbsp;
+export const mockTransaction = {
+  _id: new Types.ObjectId("60d0fe4f5311236168a109cb"),
+  user: mockUser._id,
+  amount: 1000,
+  type: "income",
+  description: "Salary",
+  createdAt: new Date(),
+  updateOne: jest.fn(),
+  deleteOne: jest.fn(),
+};
+&nbsp;
+export const generateMockTransactions = <span class="fstat-no" title="function not covered" >(c</span>ount: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return Array.from({ length: count }, <span class="fstat-no" title="function not covered" >(_</span>, i) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+    _id: new Types.ObjectId(),
+    user: mockUser._id,
+    amount: i * 100 + 1000,
+    type: i % 2 === 0 ? "income" : "expense",
+    description: `Transaction ${i + 1}`,
+    createdAt: new Date(),
+    updateOne: jest.fn(),
+    deleteOne: jest.fn(),
+  }));
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

@@ -15,7 +15,7 @@ describe("CategoryService", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockCategoryId = new Types.ObjectId(); // ✅ Đảm bảo kiểu là ObjectId
+    mockCategoryId = new Types.ObjectId();
   });
 
   //#region #01_Tạo danh mục thành công
@@ -29,21 +29,6 @@ describe("CategoryService", () => {
     expect(result).toEqual(createdCategory);
   });
   //#endregion
-
-  //#region #07_Lấy danh mục theo user
-  test("Lấy tất cả danh mục theo user", async () => {
-    (Category.find as jest.Mock).mockReturnValue({
-      lean: jest.fn().mockReturnThis(),
-      exec: jest.fn().mockResolvedValue(mockCategories),
-    });
-
-    const result = await CategoryService.getCategories(mockUser);
-
-    expect(Category.find).toHaveBeenCalledWith({ user: mockUser._id });
-    expect(result).toEqual(mockCategories);
-  });
-  //#endregion
-
   //#region #02_Cập nhật danh mục thành công
   // test("Cập nhật danh mục thành công", async () => {
   //   const existingCategory = {
@@ -72,23 +57,16 @@ describe("CategoryService", () => {
   //   expect(result.name).toBe("Shopping");
   // });
   //#endregion
+  //#region #04 Test các loại danh mục khác nhau
+  test.each(mockCategories)("Kiểm tra danh mục '%s'", async (category) => {
+    (Category.create as jest.Mock).mockResolvedValue(category);
 
-  //#region #08_Báo lỗi khi không tìm thấy danh mục khi cập nhật
-  test("Báo lỗi khi cập nhật danh mục không tồn tại", async () => {
-    (Category.findById as jest.Mock).mockResolvedValue(null);
+    const result = await CategoryService.createCategory(category);
 
-    const updatedCategory: editCategoryDto = {
-      _id: mockCategoryId.toHexString(),
-      ...mockCategory,
-      name: "Invalid",
-    };
-
-    await expect(CategoryService.editCategory(updatedCategory)).rejects.toThrow(
-      "Category not found"
-    );
+    expect(Category.create).toHaveBeenCalledWith(category);
+    expect(result).toEqual(category);
   });
   //#endregion
-
   //#region #05_Xóa danh mục thành công
   // test("Xóa danh mục thành công", async () => {
   //   (Category.findById as jest.Mock).mockResolvedValue({
@@ -106,7 +84,6 @@ describe("CategoryService", () => {
   //   expect(Category.findById).toHaveBeenCalledWith(mockCategoryId);
   // });
   //#endregion
-
   //#region #06_Báo lỗi khi không tìm thấy danh mục để xóa
   test("Báo lỗi khi xóa danh mục không tồn tại", async () => {
     (Category.findById as jest.Mock).mockResolvedValue(null);
@@ -119,15 +96,33 @@ describe("CategoryService", () => {
     ).rejects.toThrow("Category not found");
   });
   //#endregion
+  //#region #07_Lấy danh mục theo user
+  test("Lấy tất cả danh mục theo user", async () => {
+    (Category.find as jest.Mock).mockReturnValue({
+      lean: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue(mockCategories),
+    });
 
-  //#region ✅ Test các loại danh mục khác nhau
-  test.each(mockCategories)("Kiểm tra danh mục '%s'", async (category) => {
-    (Category.create as jest.Mock).mockResolvedValue(category);
+    const result = await CategoryService.getCategories(mockUser);
 
-    const result = await CategoryService.createCategory(category);
+    expect(Category.find).toHaveBeenCalledWith({ user: mockUser._id });
+    expect(result).toEqual(mockCategories);
+  });
+  //#endregion
 
-    expect(Category.create).toHaveBeenCalledWith(category);
-    expect(result).toEqual(category);
+  //#region #08_Báo lỗi khi không tìm thấy danh mục khi cập nhật
+  test("Báo lỗi khi cập nhật danh mục không tồn tại", async () => {
+    (Category.findById as jest.Mock).mockResolvedValue(null);
+
+    const updatedCategory: editCategoryDto = {
+      _id: mockCategoryId.toHexString(),
+      ...mockCategory,
+      name: "Invalid",
+    };
+
+    await expect(CategoryService.editCategory(updatedCategory)).rejects.toThrow(
+      "Category not found"
+    );
   });
   //#endregion
 });

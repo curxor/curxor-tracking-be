@@ -33,13 +33,6 @@ export default class AuthService {
     email: string;
     otp: string;
   }): Promise<String> {
-    // Kiểm tra email hợp lệ
-    if (!email) throw createHttpError(400, "Email is required");
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-      throw createHttpError(400, "Invalid email address");
-    }
     // Kiểm tra OTP trong Redis
     const userOtp = await RedisService.get(OTP_KEY + email);
     if (!userOtp) throw createHttpError("Invalid OTP");
