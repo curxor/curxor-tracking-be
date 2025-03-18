@@ -14,6 +14,7 @@ export default class ConversationController {
     const rs = await ConversationService.sendMessage({
       user: req.user,
       ...req.body,
+      file: req.file,
     });
     return res.json({ message: "ok", status: 200, data: rs });
   };

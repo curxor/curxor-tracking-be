@@ -5,4 +5,5 @@ export interface sendMessageDto {
   text: string;
   conversationId: string;
   botId: String;
+  file: Express.Multer.File;
 }
