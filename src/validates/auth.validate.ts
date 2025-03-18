@@ -9,5 +9,5 @@ export const signInSchema = yup.object().shape({
 });
 
 export const verifySchema = yup.object().shape({
-  email: yup.number().required("OTP is required"),
+  otp: yup.number().required("OTP is required"),
 });
