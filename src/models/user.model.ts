@@ -3,8 +3,8 @@ export interface IUser {
   _id: Types.ObjectId;
   name: string;
   email: string;
-  avatar: string;
-  balance: number;
+  avatar?: string;
+  balance?: number;
 }
 const userSchema = new Schema<IUser>(
   {
@@ -19,3 +19,7 @@ const userSchema = new Schema<IUser>(
 );
 
 export const User = model<IUser>("User", userSchema);
+// const UserModel = model<IUser>("User", userSchema);
+
+// export default UserModel; // ✅ Thêm default export
+// export { UserModel };

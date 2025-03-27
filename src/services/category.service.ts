@@ -16,7 +16,7 @@ export default class CategoryService {
     });
   }
 
-  private static async findCategory(
+  public static async findCategory(
     _id: string,
     user: IUser
   ): Promise<CategoryDocument> {
@@ -34,11 +34,29 @@ export default class CategoryService {
     return category;
   }
 
-  static async deleteCategory(
-    deleteCategory: deleteCategoryDto
-  ): Promise<void> {
+  // static async deleteCategory(
+  //   deleteCategory: deleteCategoryDto
+  // ): Promise<void> {
+  //   const { _id, user } = deleteCategory;
+  //   const category = await this.findCategory(_id, user);
+  //   await category.deleteOne();
+  // }
+  static async deleteCategory(deleteCategory: deleteCategoryDto): Promise<void> {
     const { _id, user } = deleteCategory;
+
+    if (!_id) {
+      throw new Error("ID is required");
+    }
+
+    if (!user?._id) {
+      throw new Error("User ID is required");
+    }
+
     const category = await this.findCategory(_id, user);
+    if (!category) {
+      throw new Error("Category not found");
+    }
+
     await category.deleteOne();
   }
   static async getCategories(user: IUser): Promise<ICategory[]> {

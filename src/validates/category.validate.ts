@@ -9,11 +9,20 @@ export const createCategorySchema = yup.object().shape({
     .max(50, "Name must be less than 50 characters"),
   description: yup
     .string()
-    .max(200, "Description must be less than 200 characters"),
+    .max(200, "Description must be less than 200 characters")
+    .required("Description is required"),
   icon: yup.string().required("Icon is required"),
   type: yup
     .string()
+    .transform((value) => (value === "" ? undefined : value))
     .required("Type is required")
-    .oneOf(Object.values(CATEGORY_TYPE), "Invalid category type"),
+    .oneOf(Object.values(CATEGORY_TYPE), "Type is required"),
   amount: yup.number().min(0, "Amount must be greater than or equal to 0"),
+});
+// findCategory
+export const findCategorySchema = yup.object().shape({
+  _id: yup.string().required(" ID is required"),
+  user: yup.object().shape({
+    _id: yup.string().required("User ID is required"),
+  }),
 });

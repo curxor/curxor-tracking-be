@@ -1,4 +1,4 @@
-import AuthService from "../src/services/auth.service";
+import AuthService from "../../src/services/auth.service";
 import { Types } from "mongoose";
 
 const testUser = {
@@ -144,3 +144,116 @@ describe("AuthService - Verify SignIn", () => {
     //#endregion
   });
 });
+// import mongoose, { Types } from "mongoose";
+// import AuthService from "../src/services/auth.service";
+// // import { UserModel } from "../src/models/user.model";
+// // import UserModel, { IUser } from "../src//models/user.model";
+// import { User as UserModel, IUser } from "../src/models/user.model";
+
+// const testUser = {
+//   validUser: { email: "ngoc.phangiangbao@gmail.com", otp: "2468" },
+//   missingAtSymbol: { email: "ngoc.phangiangbaogmail.com", otp: "2468" },
+//   missingDot: { email: "ngoc.phangiangbao@gmailcom", otp: "2468" },
+//   emptyEmail: { email: "", otp: "2468" },
+//   invalidEmailFormat: { email: "$%^@gmail.com", otp: "2468" },
+//   expiredOTP: { email: "ngoc.phangiangbao@gmail.com", otp: "0000" },
+// };
+
+// let mockUserId: Types.ObjectId;
+
+// describe("AuthService - Verify SignIn", () => {
+//   beforeAll(async () => {
+//     jest.setTimeout(15000);
+//     // Kết nối MongoDB thật
+//     await mongoose.connect("mongodb://localhost:27017/test-db");
+//   });
+
+//   beforeEach(async () => {
+//     // Xóa dữ liệu cũ (nếu có)
+//     await UserModel.deleteMany({});
+
+//     // Tạo dữ liệu thực trong MongoDB
+//     const newUser = await UserModel.create({
+//       email: testUser.validUser.email,
+//       otp: testUser.validUser.otp,
+//     });
+//     mockUserId = newUser._id;
+//   });
+
+//   afterEach(async () => {
+//     // Xóa dữ liệu sau khi chạy test
+//     await UserModel.deleteMany({});
+//   });
+
+//   afterAll(async () => {
+//     // Đóng kết nối MongoDB
+//     await mongoose.connection.close();
+//   });
+
+//   //#region 01_Email hợp lệ
+//   describe("Email hợp lệ", () => {
+//     it("Trả về thành công khi email và OTP hợp lệ", async () => {
+//       const { email, otp } = testUser.validUser;
+//       await expect(AuthService.verifySignIn({ email, otp })).resolves.toBe(
+//         "Success"
+//       );
+//     });
+//   });
+
+//   //#region 02_Email không hợp lệ
+//   describe("Email không hợp lệ", () => {
+//     it("Email thiếu @", async () => {
+//       const { email, otp } = testUser.missingAtSymbol;
+//       await expect(AuthService.verifySignIn({ email, otp })).rejects.toThrow(
+//         "Invalid email address"
+//       );
+//     });
+
+//     it("Email thiếu dấu .", async () => {
+//       const { email, otp } = testUser.missingDot;
+//       await expect(AuthService.verifySignIn({ email, otp })).rejects.toThrow(
+//         "Invalid email address"
+//       );
+//     });
+
+//     it("Email để trống", async () => {
+//       const { email, otp } = testUser.emptyEmail;
+//       await expect(AuthService.verifySignIn({ email, otp })).rejects.toThrow(
+//         "Invalid email address"
+//       );
+//     });
+
+//     it("Email không đúng định dạng", async () => {
+//       const { email, otp } = testUser.invalidEmailFormat;
+//       await expect(AuthService.verifySignIn({ email, otp })).rejects.toThrow(
+//         "Invalid email address"
+//       );
+//     });
+//   });
+
+//   //#region 03_OTP không hợp lệ
+//   describe("OTP không hợp lệ", () => {
+//     it("OTP không chính xác", async () => {
+//       const { email } = testUser.validUser;
+//       const invalidOtp = "1234";
+//       await expect(
+//         AuthService.verifySignIn({ email, otp: invalidOtp })
+//       ).rejects.toThrow("Invalid OTP");
+//     });
+
+//     it("OTP hết hạn", async () => {
+//       const { email, otp } = testUser.expiredOTP;
+//       await expect(AuthService.verifySignIn({ email, otp })).rejects.toThrow(
+//         "OTP expired"
+//       );
+//     });
+
+//     it("Tài khoản người dùng không tồn tại", async () => {
+//       const invalidEmail = "notfound@gmail.com";
+//       const { otp } = testUser.validUser;
+//       await expect(
+//         AuthService.verifySignIn({ email: invalidEmail, otp })
+//       ).rejects.toThrow("User not found");
+//     });
+//   });
+// });
